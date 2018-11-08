@@ -1,6 +1,7 @@
 // ROOT specific includes
 #include "TFile.h"
 #include "TTree.h"
+#include "TChain.h"
 #include "TROOT.h"
 
 // podio specific includes
@@ -10,12 +11,6 @@
 
 namespace podio {
 
-  void ROOTReader::readCollectionIDTable(){
-    m_table = new CollectionIDTable();
-    auto metadatatree = static_cast<TTree*>(m_file->Get("metadata"));
-    metadatatree->SetBranchAddress("CollectionIDs",&m_table);
-    metadatatree->GetEntry(0);
-  }
 
   CollectionBase* ROOTReader::readCollection(const std::string& name) {
     // has the collection already been constructed?
@@ -25,7 +20,7 @@ namespace podio {
       return p->first;
     }
     // get the branches in the ROOT file
-    auto branch = m_eventTree->GetBranch(name.c_str());
+    auto branch = m_chain->GetBranch(name.c_str());
     if (branch == nullptr) return nullptr;
 
     // look for involved classes
@@ -65,7 +60,7 @@ namespace podio {
     auto refCollections = collection->referenceCollections();
     if (refCollections != nullptr) {
       for (int i = 0, end = refCollections->size(); i!=end; ++i){
-        branch = m_eventTree->GetBranch((name+"#"+std::to_string(i)).c_str());
+        branch = m_chain->GetBranch((name+"#"+std::to_string(i)).c_str());
         branch->SetAddress(&(*refCollections)[i]);
         branch->GetEntry(m_eventNumber);
       }
@@ -76,21 +71,24 @@ namespace podio {
     return collection;
   }
 
-  void ROOTReader::openFile(const std::string& filename){
-    m_file = TFile::Open(filename.c_str(),"READ","data file");
-    if (m_file->IsZombie()) {
-      exit(-1);
+  void ROOTReader::openFiles(const std::vector<std::string>& filenames){
+    m_chain = new TChain("events");
+    for (const auto& filename:  filenames) {
+      m_chain->Add(filename.c_str());
     }
-    m_eventTree = static_cast<TTree*>( m_file->Get("events") );
-    readCollectionIDTable();
+    m_table = new CollectionIDTable();
+    auto metadatatree = static_cast<TTree*>(m_chain->GetFile()->Get("metadata"));
+    metadatatree->SetBranchAddress("CollectionIDs",&m_table);
+    metadatatree->GetEntry(0);
+
   }
 
-  void ROOTReader::closeFile() {
-    m_file->Close();
+  void ROOTReader::closeFiles() {
+    delete m_chain;
   }
 
   void ROOTReader::readEvent(){
-    m_eventTree->GetEntry();
+    m_chain->GetEntry();
     // first prepare all collections in memory...
     for(auto inputs : m_inputs){
       inputs.first->prepareAfterRead();
@@ -102,7 +100,7 @@ namespace podio {
   //  }
   }
   bool ROOTReader::isValid() const {
-    return m_file->IsOpen() && !m_file->IsZombie();
+    return m_chain->GetFile()->IsOpen() && !m_chain->GetFile()->IsZombie();
   }
 
   ROOTReader::~ROOTReader() {
@@ -117,7 +115,7 @@ namespace podio {
   }
 
   unsigned ROOTReader::getEntries() const {
-    return m_eventTree->GetEntries();
+    return m_chain->GetEntries();
   }
 
   void ROOTReader::goToEvent(unsigned eventNumber) {
