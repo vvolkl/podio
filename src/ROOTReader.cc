@@ -3,6 +3,7 @@
 #include "TTree.h"
 #include "TChain.h"
 #include "TROOT.h"
+#include "TTreeCache.h"
 
 // podio specific includes
 #include "podio/ROOTReader.h"
@@ -90,6 +91,7 @@ namespace podio {
 
     }
     m_table = new CollectionIDTable(l_collectionIDs, l_names);
+    m_chain->StopCacheLearningPhase();
 
   }
 
