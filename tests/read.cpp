@@ -213,5 +213,6 @@ int main(){
     store.clear();
     reader.endOfEvent();
   }
+  reader.closeFiles();
   return 0;
 }

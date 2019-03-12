@@ -14,7 +14,6 @@ namespace podio {
 
 
   CollectionBase* ROOTReader::readCollection(const std::string& name) {
-    m_chain->ResetBranchAddresses();
     // has the collection already been constructed?
     auto p = std::find_if(begin(m_inputs), end(m_inputs),
         [name](ROOTReader::Input t){ return t.second == name;});
@@ -57,18 +56,26 @@ namespace podio {
     collection = static_cast<CollectionBase*>(collectionClass->New());
     // connect buffer, collection and branch
     collection->setBuffer(buffer);
-    m_chain->SetBranchAddress(name.c_str(), collection->getBufferAddress());
+    branch->SetAddress(collection->getBufferAddress());
     m_inputs.emplace_back(std::make_pair(collection,name));
-    m_chain->GetEvent(m_eventNumber);
+    Long64_t localEntry = m_chain->LoadTree(m_eventNumber);
+    // After switching trees in the chain, branch pointers get invalidated
+    // so they need to be reassigned as well as addresses
+    if(localEntry == 0){
+        branch = m_chain->GetBranch(name.c_str());
+        branch->SetAddress(collection->getBufferAddress());
+    }
+    branch->GetEntry(localEntry);
     // load the collections containing references
     auto refCollections = collection->referenceCollections();
-    
+
     if (refCollections != nullptr) {
       for (int i = 0, end = refCollections->size(); i!=end; ++i){
-        m_chain->SetBranchAddress((name+"#"+std::to_string(i)).c_str(), &(*refCollections)[i]);
+        branch = m_chain->GetBranch((name+"#"+std::to_string(i)).c_str());
+        branch->SetAddress(&(*refCollections)[i]);
+        branch->GetEntry(localEntry);
       }
     }
-    m_chain->GetEvent(m_eventNumber);
     auto id = m_table->collectionID(name);
     collection->setID(id);
     collection->prepareAfterRead();
@@ -91,8 +98,6 @@ namespace podio {
 
     }
     m_table = new CollectionIDTable(l_collectionIDs, l_names);
-    m_chain->StopCacheLearningPhase();
-
   }
 
   void ROOTReader::closeFiles() {
