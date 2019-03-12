@@ -9,7 +9,6 @@ podio::PythonEventStore::PythonEventStore(const char* name) :
   m_store() {
   std::ifstream inputfile(name);
   m_isZombie = inputfile.good() ? false : true;
-<<<<<<< HEAD
   if(! m_isZombie) {
     m_reader.openFiles({std::string(name)});
   // the file could be a remote file that we cannot access but root
