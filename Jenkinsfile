@@ -15,14 +15,6 @@ pipeline {
                 """
             }
         }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-                sh """
-                cd build && 
-                """
-            }
-        }
         stage('Deploy') {
             steps {
                 sh """
