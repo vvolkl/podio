@@ -28,7 +28,7 @@ pipeline {
                 sh """
                 echo 'Deploying.... ' 
                 """
-                archiveArtifacts artifacts: "build/*.deb"
+                archiveArtifacts artifacts: "build/*.deb", fingerprint: 'true'
 
             }
         }
