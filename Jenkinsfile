@@ -2,10 +2,22 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Build-lxplus') {
+            agent none
             steps {
                 sh """
                 source init.sh && 
+                mkdir build install || true && 
+                cd build && 
+                cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_PREFIX=../install .. && 
+                make -j `getconf _NPROCESSORS_ONLN` install;
+                """
+            }
+        }
+        stage('Build-ubuntu') {
+            agent fcc-ubuntu
+            steps {
+                sh """
                 mkdir build install || true && 
                 cd build && 
                 cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_PREFIX=../install .. && 
