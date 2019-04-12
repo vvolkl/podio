@@ -9,7 +9,8 @@ pipeline {
                 mkdir build install || true && 
                 cd build && 
                 cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_PREFIX=../install .. && 
-                make -j `getconf _NPROCESSORS_ONLN` install;
+                make -j `getconf _NPROCESSORS_ONLN` install &&
+                cpack --config ./CPackConfig.cmake -G DEB
                 """
             }
         }
@@ -25,9 +26,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh """
-                cd build && rm *.deb || true; 
-                echo 'Deploying.... ' &&
-                cpack --config ./CPackConfig.cmake -G DEB
+                echo 'Deploying.... ' 
                 """
                 archiveArtifacts artifacts: "build/*.deb"
 
