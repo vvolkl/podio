@@ -24,7 +24,13 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying.... (skip)'
+                sh """
+                cd build && rm *.deb || true; 
+                echo 'Deploying.... ' &&
+                cpack --config ./CPackConfig.cmake -G DEB
+                """
+                archiveArtifacts artifacts: "build/*.deb"
+
             }
         }
     }
