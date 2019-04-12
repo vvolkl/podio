@@ -6,7 +6,6 @@ pipeline {
             agent { label 'fcc-ubuntu' }
             steps {
                 sh """
-                export PODIO=$PWD &&
                 mkdir build install || true && 
                 cd build && 
                 cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_PREFIX=../install .. && 
@@ -18,7 +17,6 @@ pipeline {
             steps {
                 echo 'Testing..'
                 sh """
-                export PODIO=$PWD &&
                 cd build && 
                 ctest -j `getconf _NPROCESSORS_ONLN` --test-load `getconf _NPROCESSORS_ONLN`
                 """
