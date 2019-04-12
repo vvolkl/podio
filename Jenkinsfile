@@ -3,7 +3,7 @@ pipeline {
 
     stages {
         stage('Build-lxplus') {
-            agent none
+            agent { label 'fcc-cc7-cvmfs' }
             steps {
                 sh """
                 source init.sh && 
@@ -15,7 +15,7 @@ pipeline {
             }
         }
         stage('Build-ubuntu') {
-            agent fcc-ubuntu
+            agent { label 'fcc-ubuntu' }
             steps {
                 sh """
                 mkdir build install || true && 
