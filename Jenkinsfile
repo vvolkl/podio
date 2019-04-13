@@ -6,6 +6,7 @@ pipeline {
             agent { label 'fcc-ubuntu' }
             steps {
                 sh """
+                source /etc/profile &&
                 mkdir build install || true && 
                 cd build && 
                 cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_PREFIX=../install   .. && 
