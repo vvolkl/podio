@@ -14,6 +14,8 @@ pipeline {
                 ctest -j `getconf _NPROCESSORS_ONLN` --test-load `getconf _NPROCESSORS_ONLN`  --output-on-failure  &&
                 cpack --config ./CPackConfig.cmake -G DEB -D CMAKE_INSTALL_PREFIX=/usr/local
                 """
+                archiveArtifacts artifacts: "build/*.deb", fingerprint: 'true'
+
             }
         }
         stage('Deploy') {
@@ -21,7 +23,6 @@ pipeline {
                 sh """
                 echo 'Deploying.... ' 
                 """
-                archiveArtifacts artifacts: "build/*.deb", fingerprint: 'true'
 
             }
         }
