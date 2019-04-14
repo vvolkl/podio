@@ -20,7 +20,7 @@ pipeline {
             agent {
               docker {
                   image 'gitlab-registry.cern.ch/lhcb-core/lbdocker/centos7-build-cvmfs:latest'
-                  args ' -v /cvmfs:/cvmfs'
+                  args ' -v /cvmfs:/cvmfs --entrypoint=/bin/bash'
               }
             }
             steps {
