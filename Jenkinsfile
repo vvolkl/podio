@@ -23,11 +23,14 @@ pipeline {
         stage('Deploy') {
             agent {
               docker {
-                  image 'gitlab-registry.cern.ch/vavolkl/fcc-ubuntu:latest'
+                  image 'gitlab-registry.cern.ch/lhcb-core/lbdocker/centos7-build-cvmfs:latest'
+                  args ' -v /cvmfs:/cvmfs'
               }
             }
             steps {
                 sh """
+                source /cvmfs/sft.cern.ch/lcg/views/LCG_94/x86_64-centos7-gcc8-opt/setup.sh &&
+                which root &&
                 echo 'Deploying.... ' 
                 """
 
