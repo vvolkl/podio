@@ -12,9 +12,9 @@ pipeline {
             steps {
                 sh """
                 source /cvmfs/sft.cern.ch/lcg/views/LCG_94/x86_64-centos7-gcc8-opt/setup.sh 
-                mkdir build-cc7 install || true &&
+                mkdir build-cc7 install-cc7 || true &&
                 cd build-cc7 &&
-                cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_PREFIX=../install   .. &&
+                cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_PREFIX=../install-cc7   .. &&
                 make -j `getconf _NPROCESSORS_ONLN` install  &&
                 ctest -j `getconf _NPROCESSORS_ONLN` --test-load `getconf _NPROCESSORS_ONLN`  --output-on-failure  &&
                 cpack --config ./CPackConfig.cmake -G RPM -D CMAKE_INSTALL_PREFIX=/usr/local
@@ -26,8 +26,7 @@ pipeline {
          stage('Build-ubuntu') {
             agent { label 'fcc-ubuntu' }
               steps {
-                sh """
-                source /etc/profile &&
+                sh """#!/bin/bash -l
                 mkdir build install || true &&
                 cd build &&
                 cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_PREFIX=../install   .. &&
