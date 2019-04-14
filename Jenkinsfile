@@ -2,24 +2,20 @@ pipeline {
     agent {label 'fcc-ubuntu'}
 
     stages {
-            stage('Back-end') {
-            agent {
-                docker { image 'maven:3-alpine' }
+         stage('Build-ubuntu') {
+            agent { label 'fcc-ubuntu' }
+              steps {
+                sh """
+                source /etc/profile &&
+                mkdir build install || true &&
+                cd build &&
+                cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_PREFIX=../install   .. &&
+                make -j `getconf _NPROCESSORS_ONLN` install  &&
+                ctest -j `getconf _NPROCESSORS_ONLN` --test-load `getconf _NPROCESSORS_ONLN`  --output-on-failure  &&
+                cpack --config ./CPackConfig.cmake -G DEB -D CMAKE_INSTALL_PREFIX=/usr/local
+                """
+              }
             }
-            steps {
-                sh 'mvn --version'
-            }
-        }
-        stage('Front-end') {
-            agent {
-                docker { 
-                  image 'node:7-alpine' 
-                }
-            }
-            steps {
-                sh 'node --version'
-            }
-        }
         stage('Deploy') {
             agent {
               docker {
@@ -30,8 +26,12 @@ pipeline {
             steps {
                 sh """
                 source /cvmfs/sft.cern.ch/lcg/views/LCG_94/x86_64-centos7-gcc8-opt/setup.sh &&
-                which root &&
-                echo 'Deploying.... ' 
+                mkdir build install || true &&
+                cd build &&
+                cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_PREFIX=../install   .. &&
+                make -j `getconf _NPROCESSORS_ONLN` install  &&
+                ctest -j `getconf _NPROCESSORS_ONLN` --test-load `getconf _NPROCESSORS_ONLN`  --output-on-failure  &&
+                cpack --config ./CPackConfig.cmake -G DEB -D CMAKE_INSTALL_PREFIX=/usr/local
                 """
 
             }
