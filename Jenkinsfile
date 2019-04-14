@@ -17,8 +17,9 @@ pipeline {
                 cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_PREFIX=../install   .. &&
                 make -j `getconf _NPROCESSORS_ONLN` install  &&
                 ctest -j `getconf _NPROCESSORS_ONLN` --test-load `getconf _NPROCESSORS_ONLN`  --output-on-failure  &&
-                cpack --config ./CPackConfig.cmake -G YUM -D CMAKE_INSTALL_PREFIX=/usr/local
+                cpack --config ./CPackConfig.cmake -G RPM -D CMAKE_INSTALL_PREFIX=/usr/local
                 """
+                archiveArtifacts artifacts: "build-cc7/*.rpm", fingerprint: 'true'
 
             }
         }
@@ -34,6 +35,7 @@ pipeline {
                 ctest -j `getconf _NPROCESSORS_ONLN` --test-load `getconf _NPROCESSORS_ONLN`  --output-on-failure  &&
                 cpack --config ./CPackConfig.cmake -G DEB -D CMAKE_INSTALL_PREFIX=/usr/local
                 """
+                archiveArtifacts artifacts: "build/*.deb", fingerprint: 'true'
               }
             }
     }
