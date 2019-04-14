@@ -12,7 +12,10 @@ pipeline {
         }
         stage('Front-end') {
             agent {
-                docker { image 'node:7-alpine' }
+                docker { 
+                  image 'node:7-alpine' 
+                  args '--entrypoint="/bin/sh"'
+                }
             }
             steps {
                 sh 'node --version'
