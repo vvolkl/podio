@@ -23,7 +23,7 @@ pipeline {
         stage('Deploy') {
             agent {
               docker {
-                  image 'gitlab-registry.cern.ch/sft/docker:cc7-lcg-cvmfs'
+                  image 'gitlab-registry.cern.ch/vavolkl/fcc-ubuntu:latest'
               }
             }
             steps {
