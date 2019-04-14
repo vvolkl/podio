@@ -6,7 +6,7 @@ pipeline {
             agent {
               docker {
                   image 'gitlab-registry.cern.ch/sft/docker:cc7-lcg-cvmfs'
-                  args '--privileged '
+                  args '--privileged -it --entrypoint=/bin/bash'
               }
             }
             steps {
