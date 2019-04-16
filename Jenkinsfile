@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage('Build-cc7-cvmfs') {
             agent {
+              label 'fcc-ubuntu'
               docker {
                   image 'gitlab-registry.cern.ch/lhcb-core/lbdocker/centos7-build-cvmfs:latest'
                   args ' -v /cvmfs:/cvmfs'
@@ -25,6 +26,7 @@ pipeline {
         }
          stage('Build-ubuntu') {
             agent {
+              label 'fcc-ubuntu'
               docker {
                   image 'gitlab-registry.cern.ch/vavolkl/fcc-ubuntu:latest'
                   }
