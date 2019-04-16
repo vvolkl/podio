@@ -10,8 +10,8 @@ pipeline {
               }
             }
             steps {
-                sh """#!/bin/bash
-                source /cvmfs/sft.cern.ch/lcg/views/LCG_94/x86_64-centos7-gcc8-opt/setup.sh 
+                sh """#!/bin/bash -l
+                source /cvmfs/sft.cern.ch/lcg/views/LCG_94/x86_64-centos7-gcc8-opt/setup.sh &&
                 mkdir build-cc7 install-cc7 || true &&
                 cd build-cc7 &&
                 cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_PREFIX=../install-cc7   .. &&
