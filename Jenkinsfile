@@ -10,7 +10,7 @@ pipeline {
               }
             }
             steps {
-                sh """
+                sh """#!/bin/bash
                 source /cvmfs/sft.cern.ch/lcg/views/LCG_94/x86_64-centos7-gcc8-opt/setup.sh 
                 mkdir build-cc7 install-cc7 || true &&
                 cd build-cc7 &&
@@ -24,7 +24,11 @@ pipeline {
             }
         }
          stage('Build-ubuntu') {
-            agent { label 'fcc-ubuntu' }
+            agent {
+              docker {
+                  image 'gitlab-registry.cern.ch/vavolkl/fcc-ubuntu:latest'
+                  }
+              }
               steps {
                 sh """#!/bin/bash -l
                 mkdir build install || true &&
