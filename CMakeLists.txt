@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.3)
 
 #--- Project name --------------------------------------------------------------
-project(podio VERSION 0.9.1)
+project(podio VERSION 0.9.2)
 
 #--- Version -------------------------------------------------------------------
 
