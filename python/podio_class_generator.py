@@ -1,7 +1,6 @@
- #!/usr/bin/env python
+   #!/usr/bin/env python
 
-from __future__ import print_function
-from past.builtins import xrange
+from __future__ import absolute_import, unicode_literals, print_function
 from six import iteritems
 from six import iterkeys
 
@@ -101,7 +100,7 @@ class ClassGenerator(object):
         for figline, summaryline in zip(figure, text.splitlines()):
             cntr += 1
             print(figline + summaryline)
-        for i in xrange(cntr, len(figure)):
+        for i in range(cntr, len(figure)):
             print(figure[i])
         print("     'Homage to the Square' - Josef Albers")
         print()

@@ -1,5 +1,7 @@
 
-from past.builtins import xrange
+
+from __future__ import absolute_import, unicode_literals, print_function
+from six.moves import range
 
 from ROOT import gSystem
 gSystem.Load("libpodioRootIO")
@@ -9,7 +11,7 @@ from ROOT import podio
 def iterator(self):
     '''dynamically added iterator'''
     entries = self.size()
-    for entry in xrange(entries):
+    for entry in range(entries):
         yield self.at(entry)
 
 
@@ -102,7 +104,7 @@ class EventStore(object):
         '''
         for nev, store in self.stores:
             self.current_store = store
-            for entry in xrange(store.getEntries()):
+            for entry in range(store.getEntries()):
                 yield store
                 store.endOfEvent()
 

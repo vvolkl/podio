@@ -1,9 +1,12 @@
+
+from __future__ import absolute_import, unicode_literals, print_function
+from six import iteritems
+
 import yaml
 import copy
 import re
 
 from collections import OrderedDict
-from six import iteritems
 
 def ordered_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
     class OrderedLoader(Loader):
