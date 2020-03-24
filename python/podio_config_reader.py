@@ -3,6 +3,7 @@ import copy
 import re
 
 from collections import OrderedDict
+from six import iteritems
 
 def ordered_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
     class OrderedLoader(Loader):
@@ -132,7 +133,7 @@ class ClassDefinitionValidator(object):
                                     "which is not allowed in a component!")
 
     def check_components(self, components):
-        for klassname, value in components.iteritems():
+        for klassname, value in iteritems(components):
             self.check_component(klassname, value)
 
 
@@ -161,11 +162,11 @@ class PodioConfigReader(object):
         validator = ClassDefinitionValidator(content)
         if "components" in content.keys():
             validator.check_components(content["components"])
-            for klassname, value in content["components"].iteritems():
+            for klassname, value in iteritems(content["components"]):
                 component = {"Members": value}
                 self.components[klassname] = component
         if "datatypes" in content:
-            for klassname, value in content["datatypes"].iteritems():
+            for klassname, value in iteritems(content["datatypes"]):
                 validator.check_datatype(klassname, value)
                 datatype = {}
                 datatype["Description"] = value["Description"]
@@ -191,5 +192,5 @@ class PodioConfigReader(object):
                                                      value["ConstExtraCode"])
                 self.datatypes[klassname] = datatype
         if "options" in content.keys():
-            for option, value in content["options"].iteritems():
+            for option, value in iteritems(content["options"]):
                 self.options[option] = value
