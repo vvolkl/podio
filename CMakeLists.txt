@@ -32,13 +32,6 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
   endif()
 endif()
 
-# Set up C++ Standard
-# ``-DCMAKE_CXX_STANDARD=<standard>`` when invoking CMake
-set(CMAKE_CXX_STANDARD 14 CACHE STRING "")
-
-if(NOT CMAKE_CXX_STANDARD MATCHES "14|17")
-  message(FATAL_ERROR "Unsupported C++ standard: ${CMAKE_CXX_STANDARD}")
-endif()
 
 # Prevent CMake falls back to the latest standard the compiler does support
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -77,6 +70,14 @@ find_package(ROOT REQUIRED COMPONENTS RIO Tree)
 # earlier versions need to hack in INTERFACE_INCLUDE_DIRECTORIES
 if(ROOT_VERSION VERSION_LESS 6.14)
   set_property(TARGET ROOT::Core APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${ROOT_INCLUDE_DIRS}")
+endif()
+
+# Set up C++ Standard
+# ``-DCMAKE_CXX_STANDARD=<standard>`` when invoking CMake
+set(CMAKE_CXX_STANDARD ${ROOT_CXX_STANDARD} CACHE STRING "")
+
+if(NOT CMAKE_CXX_STANDARD MATCHES "11|14|17")
+  message(FATAL_ERROR "Unsupported C++ standard: ${CMAKE_CXX_STANDARD}")
 endif()
 
 #--- enable podio macros--------------------------------------------------------
