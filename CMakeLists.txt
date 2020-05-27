@@ -74,7 +74,46 @@ endif()
 
 # Set up C++ Standard
 # ``-DCMAKE_CXX_STANDARD=<standard>`` when invoking CMake
-set(CMAKE_CXX_STANDARD ${ROOT_CXX_STANDARD} CACHE STRING "")
+
+# Detect the version of the C++ standard used to compile ROOT
+# and, if found, use it as default standard for the build.
+if(NOT ROOT_CXX_STANDARD)
+  if(ROOT_FOUND)
+    if(EXISTS ${ROOTSYS}/cmake/ROOTConfig.cmake)
+      file(READ ${ROOTSYS}/cmake/ROOTConfig.cmake _ROOT_CONFIG_CMAKE)
+      if(_ROOT_CONFIG_CMAKE MATCHES "ROOT_CXX_FLAGS.*-std=(c\\+\\+..)")
+        set(ROOT_CXX_STANDARD "${CMAKE_MATCH_1}")
+      endif()
+    endif()
+    if(NOT ROOT_CXX_STANDARD)
+      # the ROOTConfig.cmake delivered by ROOT does not define ROOT_INCLUDE_DIR
+      if(NOT DEFINED ROOT_INCLUDE_DIR)
+        list(GET ROOT_INCLUDE_DIRS 0 ROOT_INCLUDE_DIR)
+      endif()
+      file(STRINGS ${ROOT_INCLUDE_DIR}/RConfigure.h _RConfigure REGEX "define R__")
+      foreach(rconfig_line IN LISTS _RConfigure)
+        if(rconfig_line MATCHES "R__USE_CXX([^ ]+)")
+          set(ROOT_CXX_STANDARD "c++${CMAKE_MATCH_1}")
+        endif()
+      endforeach()
+    endif()
+    if(ROOT_CXX_STANDARD)
+      set(ROOT_CXX_STANDARD "${ROOT_CXX_STANDARD}" CACHE INTERNAL
+          "C++ standard used by ROOT")
+      mark_as_advanced(ROOT_CXX_STANDARD)
+    endif()
+    set(_RConfigure)
+    set(rconfig_line)
+  endif()
+endif()
+if(ROOT_CXX_STANDARD)
+  set(PODIO_CXX_STANDARD_DEFAULT "${ROOT_CXX_STANDARD}")
+else()
+  set(PODIO_CXX_STANDARD_DEFAULT 17)
+endif()
+
+
+set(CMAKE_CXX_STANDARD ${PODIO_CXX_STANDARD_DEFAULT} CACHE STRING "")
 
 if(NOT CMAKE_CXX_STANDARD MATCHES "11|14|17")
   message(FATAL_ERROR "Unsupported C++ standard: ${CMAKE_CXX_STANDARD}")
