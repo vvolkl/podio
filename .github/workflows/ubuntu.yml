@@ -1,0 +1,23 @@
+name: linux
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup ROOT on Ubuntu
+      run: |
+        wget https://root.cern/download/root_v6.20.04.Linux-ubuntu18-x86_64-gcc7.5.tar.gz
+        tar xfz root_v6.20.04.Linux-ubuntu18-x86_64-gcc7.5.tar.gz
+        cd root
+        source bin/thisroot.sh
+    - name: Compile and test
+      run: |
+        mkdir build install
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX=../install -DCMAKE_CXX_STANDARD=17  -DCMAKE_CXX_FLAGS=" -fdiagnostics-color=always " -G Ninja .. && \
+        ninja -k0 && \
+        ninja install && \
+        ctest --output-on-failure
