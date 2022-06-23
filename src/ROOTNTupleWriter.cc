@@ -132,17 +132,6 @@ void ROOTNTupleWriter::createModels(const std::vector<StoreCollection>& collecti
   auto collTypes  = m_metadata->MakeField<std::vector<std::string>>("CollectionTypes");
   m_ntuple_metadata = rnt::RNTupleWriter::Append(std::move(m_metadata), "metadata", *m_file, {});
 
-  auto runIDs  = m_runMD->MakeField<std::vector<int>>("RunIDs");
-  auto runMD_IntKeys  = m_runMD->MakeField<std::vector<std::vector<std::string>>>("RunMD_IntKeys");
-  auto runMD_IntValues  = m_runMD->MakeField<std::vector<std::vector<int>>>("RunMD_IntValues");
-
-  auto runMD_FloatKeys  = m_runMD->MakeField<std::vector<std::vector<std::string>>>("RunMD_FloatKeys");
-  auto runMD_FloatValues  = m_runMD->MakeField<std::vector<std::vector<float>>>("RunMD_FloatValues");
-
-  auto runMD_StringKeys  = m_runMD->MakeField<std::vector<std::vector<std::string>>>("RunMD_StringKeys");
-  auto runMD_StringValues  = m_runMD->MakeField<std::vector<std::vector<std::string>>>("RunMD_StringValues");
-  m_ntuple_runMD = rnt::RNTupleWriter::Append(std::move(m_runMD), "runMD", *m_file, {});
-
 
   auto collIDTable = m_store->getCollectionIDTable();
 
@@ -157,24 +146,10 @@ void ROOTNTupleWriter::createModels(const std::vector<StoreCollection>& collecti
   }
   m_ntuple_metadata->Fill();
 
-  for (const auto& metadatapair : *(m_store->getRunMetaDataMap())) {
-    runIDs->push_back(metadatapair.first);
-    auto intKeysForOneRun = std::vector<std::string>();
-    metadatapair.second.getIntKeys(intKeysForOneRun);
-    runMD_IntKeys->push_back(intKeysForOneRun);
-    auto floatKeysForOneRun = std::vector<std::string>();
-    metadatapair.second.getFloatKeys(floatKeysForOneRun);
-    runMD_FloatKeys->push_back(floatKeysForOneRun);
-    auto stringKeysForOneRun = std::vector<std::string>();
-    metadatapair.second.getStringKeys(stringKeysForOneRun);
-    runMD_StringKeys->push_back(stringKeysForOneRun);
-
-  }
 
 
 
 
-  m_ntuple_runMD->Fill();
 }
 
 } //namespace podio
