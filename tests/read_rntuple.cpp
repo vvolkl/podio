@@ -27,7 +27,7 @@ using namespace ROOT::Experimental;
 int main() {
 
 
-   auto ntuple = RNTupleReader::Open("events", "example_rntuple.root");
+   auto ntuple = RNTupleReader::Open("metadata", "example_rntuple.root");
 
    // Display the schema of the ntuple
    ntuple->PrintInfo();
