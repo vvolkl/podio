@@ -20,7 +20,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v5
       with:
         cvmfs_repositories: 'sft.cern.ch,geant4.cern.ch,sft-nightlies.cern.ch'
-        run: : |
+        run: |
           ls /cvmfs/sft.cern.ch | grep lcg
           ls /cvmfs/sft-nightlies.cern.ch | grep lcg
           ls /Users/Shared/cvmfs/sft-nightlies.cern.ch/lcg/views/dev4/latest/arm64-mac15-clang160-opt | grep setup.sh
