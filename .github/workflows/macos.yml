@@ -17,7 +17,7 @@ jobs:
               "dev4/arm64-mac15-clang160-opt "]
     steps:
     - uses: actions/checkout@v4
-    - uses: cvmfs-contrib/github-action-cvmfs@v5
+    - uses: cvmfs-contrib/github-action-cvmfs@v5.0
     - uses: aidasoft/run-lcg-view@v4
       with:
         release-platform: ${{ matrix.LCG }}
