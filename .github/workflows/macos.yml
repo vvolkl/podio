@@ -20,6 +20,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v5
       with:
         cvmfs_repositories: 'sft.cern.ch,geant4.cern.ch,sft-nightlies.cern.ch'
+        cvmfs_debuglog: '/tmp/cvmfs-debug.log'
     - name: "Test CVMFS"
       run: |
           ls /cvmfs/sft.cern.ch | grep lcg
