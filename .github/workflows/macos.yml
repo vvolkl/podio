@@ -25,7 +25,7 @@ jobs:
           ls /cvmfs/sft.cern.ch | grep lcg
           ls /cvmfs/sft-nightlies.cern.ch | grep lcg
           ls /Users/Shared/cvmfs/sft-nightlies.cern.ch/lcg/views/dev4/latest/arm64-mac15-clang160-opt | grep setup.sh
-    - uses: aidasoft/run-lcg-view@v4
+    - uses: vvolkl/run-lcg-view@main
       with:
         release-platform: ${{ matrix.LCG }}
         run: |
