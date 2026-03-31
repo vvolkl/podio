@@ -31,7 +31,9 @@ jobs:
       with:
         repository: eic/EDM4eic
         path: edm4eic
-    - uses: vvolkl/github-action-cvmfs@f7f70a58623e9631a939482869488e74cb355721
+    - uses: vvolkl/github-action-cvmfs@be3f8a82e9aa105c3b6a78ab5f5eb78b4deeb3c1
+      with:
+        actions_cache: true
     - uses: key4hep/key4hep-actions/cache-external-data@main
     - uses: aidasoft/run-lcg-view@v5
       with:
