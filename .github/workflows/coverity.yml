@@ -10,7 +10,7 @@ jobs:
     if: github.repository == 'AIDASoft/podio'
     steps:
     - uses: actions/checkout@v4
-    - uses: vvolkl/github-action-cvmfs@8d9601472bd6e49f39adb13e162e42d398ec5487
+    - uses: vvolkl/github-action-cvmfs@9aa73046ef4275c9f84fd8deb714cbec0048823e
       with:
         actions_cache: true
     - uses: aidasoft/run-lcg-view@v4
