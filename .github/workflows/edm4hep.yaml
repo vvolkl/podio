@@ -33,7 +33,7 @@ jobs:
           repository: catchorg/Catch2
           path: catch2
           ref: v3.4.0
-      - uses: vvolkl/github-action-cvmfs@be3f8a82e9aa105c3b6a78ab5f5eb78b4deeb3c1
+      - uses: vvolkl/github-action-cvmfs@8d9601472bd6e49f39adb13e162e42d398ec5487
         with:
           actions_cache: true
       - uses: aidasoft/run-lcg-view@v5
