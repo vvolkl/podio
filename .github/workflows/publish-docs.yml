@@ -19,7 +19,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - uses: vvolkl/github-action-cvmfs@cdf34dd7656627ffc77fcb43cc2b708ea148f49e
+    - uses: vvolkl/github-action-cvmfs@66b5db23cffa1e5d0a4d386897178958f9a98d1e
       with:
         actions_cache: true
     - uses: aidasoft/run-lcg-view@v4

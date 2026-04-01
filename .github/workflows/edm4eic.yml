@@ -31,7 +31,7 @@ jobs:
       with:
         repository: eic/EDM4eic
         path: edm4eic
-    - uses: vvolkl/github-action-cvmfs@cdf34dd7656627ffc77fcb43cc2b708ea148f49e
+    - uses: vvolkl/github-action-cvmfs@66b5db23cffa1e5d0a4d386897178958f9a98d1e
       with:
         actions_cache: true
     - uses: key4hep/key4hep-actions/cache-external-data@main
