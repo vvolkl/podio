@@ -22,7 +22,7 @@ jobs:
               "dev4/x86_64-ubuntu2404-gcc13-opt"]
     steps:
     - uses: actions/checkout@v4
-    - uses: vvolkl/github-action-cvmfs@b1115d7787de5ab6e414b5c0fd1729a7ca5a75f7
+    - uses: vvolkl/github-action-cvmfs@e866af10c09489348129a9a73f640586b5c69d5c
       with:
         actions_cache: true
     - uses: key4hep/key4hep-actions/cache-external-data@main
