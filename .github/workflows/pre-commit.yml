@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: vvolkl/github-action-cvmfs@196a02309e03c5281edb980c6f673213e52609e9
+    - uses: vvolkl/github-action-cvmfs@b1115d7787de5ab6e414b5c0fd1729a7ca5a75f7
       with:
         actions_cache: true
     - uses: aidasoft/run-lcg-view@v4
